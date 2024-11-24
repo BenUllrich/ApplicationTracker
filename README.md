@@ -3,18 +3,10 @@
 
 To Do List:
 - [ ] UI
-  - [ ] Main Menu
-  - [ ] Settings Menu
-
   - [ ] Applications Menu
-    - [ ] List applications from csv file (pandas)
+    - [ ] List applications from csv/google sheets file (pandas)
     - [ ] Update/edit applications (pandas)
-  - [ ] Settings and Files Menu
-    - [ ] Default Settings
-    - [ ] Import Settings
-    - [ ] Change File Path
-    - [ ] Import File
-      - [ ] File information (resume/cover letter, nickname)
-    - [ ] Delete File
-    - [ ] Open File
+- [ ] Google sheets API functionality
+  - [ ] Read Sheet into pandas
+  - [ ] create new sheet if sheet doesn't exist
 - [ ] Testing
