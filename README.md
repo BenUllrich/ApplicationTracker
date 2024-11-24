@@ -7,8 +7,8 @@ To Do List:
     - [ ] List applications from csv/google sheets file (pandas)
     - [ ] Update/edit applications (pandas)
 - [ ] Google drive API functionality
-  - [ ] Read Sheet into pandas
-  - [ ] create new sheet if sheet doesn't exist
+  - [ ] Read CSV into pandas
+  - [ ] create new CSV if file doesn't exist
 - [ ] Testing
 
 ## Functionality Description:
