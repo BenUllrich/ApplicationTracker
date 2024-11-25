@@ -15,19 +15,25 @@ def mainMenu():
     window.title("Main Menu")
     window.resizable(width=False, height=False)
     window.size()
-
+    window.config(bg="grey16")
 
     btn_apps = tk.Button(
         master=window,
         text="Applications",
         command=applicationsMenu(),
         width=20,
-        height=5
+        height=5,
+        font=("Calibri", 18),
+        fg = 'white',
+        bg = 'grey16'
     )
     btn_settings = tk.Button(
         master=window,
         text="Settings",
         command=applicationsMenu(),
+        font=("Calibri", 18),
+        fg='white',
+        bg='grey16',
         width=20,
         height=5
     )
@@ -36,7 +42,10 @@ def mainMenu():
         text="Files",
         command=applicationsMenu(),
         width=20,
-        height=5
+        height=5,
+        font=("Calibri", 18),
+        fg = 'white',
+        bg = 'grey16'
     )
 
     # Set up the layout using the .grid() geometry manager
