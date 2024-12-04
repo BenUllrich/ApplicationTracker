@@ -27,8 +27,11 @@ To Do List:
 
 ## Applications Page
 - Table list of all applications - Job Title | Company | Applied Date | Status | Connections | Notes/Reminders
-- Status update button or set a reminder
-  - new connection
+- Status update button 
+  - Add New job
+  - Change of Status
+  - New connection
+- Set a reminder
   - to prep for interview
   - send an email
   - follow up
@@ -42,15 +45,15 @@ To Do List:
 
 ## Tech Stack
 
-## Frontend UI:
+# Frontend UI:
 - tkinter
 
-## Backend:
+# Backend:
 - Python for API calls.
 
-## Database:
+# Database:
 - Use pandas / SQLite for storing user data, applications, and company directories.
 
-## Deployment:
+# Deployment:
 - Host the app on Github.
 
