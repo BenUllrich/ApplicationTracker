@@ -40,3 +40,17 @@ To Do List:
   - New connections made
 - Set a reminder - to events / check  for new job openings / follow up with the network 
 
+## Tech Stack
+
+## Frontend UI:
+- tkinter
+
+## Backend:
+- Python for API calls.
+
+## Database:
+- Use pandas / SQLite for storing user data, applications, and company directories.
+
+## Deployment:
+- Host the app on Github.
+
