@@ -18,9 +18,17 @@ To Do List:
   - This object will be used to store information about each individual application, as well as handle tasks such as adding information, updating the status, deleting the application, etc.
 - The user will be able to view, edit, and create new applications, which will be added to the active pandas dataframe, then uploaded to Google Drive
 - We can try an autosave feature, but for now, we should focus on a "Save" button to update the spreadsheet
+# Tech Stack
+## Frontend UI:
+- tkinter
+## Backend:
+- Python for API calls.
+## Database:
+- Use pandas / SQLite for storing user data, applications, and company directories.
+## Deployment:
+- Host the app on Github.
 
-## Login page
-
+# Website Layout
 ## Welcome Page
 - Welcome Message
 - Job application analytics - Graphical representation of the application status
@@ -36,24 +44,10 @@ To Do List:
   - send an email
   - follow up
     
-
-## Company Directory Page
+## Company Directory Page - (Optional for now)
 - Table View of the Companies shortlisted - Company | Industry | Locations | Connections | Notes/Reminders
 - Status update button
   - New connections made
 - Set a reminder - to events / check  for new job openings / follow up with the network 
 
-## Tech Stack
-
-# Frontend UI:
-- tkinter
-
-# Backend:
-- Python for API calls.
-
-# Database:
-- Use pandas / SQLite for storing user data, applications, and company directories.
-
-# Deployment:
-- Host the app on Github.
 
