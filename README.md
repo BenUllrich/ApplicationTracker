@@ -18,3 +18,25 @@ To Do List:
   - This object will be used to store information about each individual application, as well as handle tasks such as adding information, updating the status, deleting the application, etc.
 - The user will be able to view, edit, and create new applications, which will be added to the active pandas dataframe, then uploaded to Google Drive
 - We can try an autosave feature, but for now, we should focus on a "Save" button to update the spreadsheet
+
+## Login page
+
+## Welcome Page
+- Welcome Message
+- Job application analytics - Graphical representation of the application status
+
+## Applications Page
+- Table list of all applications - Job Title | Company | Applied Date | Status | Connections | Notes/Reminders
+- Status update button or set a reminder
+  - new connection
+  - to prep for interview
+  - send an email
+  - follow up
+    
+
+## Company Directory Page
+- Table View of the Companies shortlisted - Company | Industry | Locations | Connections | Notes/Reminders
+- Status update button
+  - New connections made
+- Set a reminder - to events / check  for new job openings / follow up with the network 
+
