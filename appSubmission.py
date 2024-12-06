@@ -1,7 +1,29 @@
 from tkinter import Tk, Label, Entry, Button, OptionMenu, StringVar, messagebox
+from tkinter import Toplevel, ttk
 from datetime import date
-from googleSheetsAPI import connect_to_google_sheet, add_application_to_sheet
-from Application import Application
+import csv
+import pandas as pd
+import matplotlib.pyplot as plt
+from google_auth_oauthlib.flow import InstalledAppFlow
+from googleapiclient.discovery import build
+from googleapiclient.http import MediaFileUpload
+
+# Google Drive Authentication
+def authenticate_user():
+    SCOPES = ['https://www.googleapis.com/auth/drive.file']
+    flow = InstalledAppFlow.from_client_secrets_file('client_secret.json', SCOPES)
+    creds = flow.run_local_server(port=0)
+    return build('drive', 'v3', credentials=creds)
+
+def upload_to_drive(file_name):
+    try:
+        service = authenticate_user()
+        file_metadata = {'name': file_name}
+        media = MediaFileUpload(file_name, mimetype='text/csv')
+        service.files().create(body=file_metadata, media_body=media, fields='id').execute()
+        messagebox.showinfo("Success", "File uploaded to Google Drive!")
+    except Exception as e:
+        messagebox.showerror("Error", f"Failed to upload to Google Drive: {str(e)}")
 
 def submit_application():
     company = company_var.get()
@@ -11,27 +33,29 @@ def submit_application():
     submission_date = date.today()
     conn = conn_var.get()
 
+    if not company or not title or not platform or not status:
+        messagebox.showerror("Error", "All fields except 'Connections' are required!")
+        return
+
+    file_name = "applications.csv"
     try:
-        # Create an Application object
-        app = Application(
-            companyName=company,
-            jobTitle=title,
-            method=platform,
-            submissionDate=submission_date,
-            status=status,
-            connnections = conn,
-        )
-
-        # Connect to the Google Sheet
-        sheet = connect_to_google_sheet("JobApplications")
-        
-        # Add the application to the sheet
-        add_application_to_sheet(sheet, app)
-
+        with open(file_name, mode='a', newline='') as file:
+            writer = csv.writer(file)
+            writer.writerow([company, title, platform, status, submission_date, conn])
         messagebox.showinfo("Success", "Application added successfully!")
+        upload_to_drive(file_name)
     except Exception as e:
-        messagebox.showerror("Error", str(e))
+        messagebox.showerror("Error", f"Failed to save application: {str(e)}")
+       
+"""
+def view_applications():
+ Maybe lets use treeview for this one
+"""
 
+"""
+def show_analytics():
+ Dave -- use pandas or matplotlib
+"""
 # GUI setup
 root = Tk()
 root.title("JobApplications")
@@ -43,15 +67,7 @@ Entry(root, textvariable=company_var).grid(row=0, column=1)
 Label(root, text="Job Title").grid(row=1, column=0)
 title_var = StringVar()
 Entry(root, textvariable=title_var).grid(row=1, column=1)
-"""
-Label(root, text="Resume Path").grid(row=2, column=0)
-resume_var = StringVar()
-Entry(root, textvariable=resume_var).grid(row=2, column=1)
 
-Label(root, text="Cover Letter Path").grid(row=3, column=0)
-cover_letter_var = StringVar()
-Entry(root, textvariable=cover_letter_var).grid(row=3, column=1)
-"""
 Label(root, text="App Platform").grid(row=2, column=0)
 platform_var = StringVar()
 Entry(root, textvariable=platform_var).grid(row=2, column=1)
@@ -66,5 +82,5 @@ Entry(root, textvariable=conn_var).grid(row=4, column=1)
 
 Button(root, text="Submit", command=submit_application).grid(row=5, column=0, columnspan=2)
 
-root.mainloop()
 
+root.mainloop()
