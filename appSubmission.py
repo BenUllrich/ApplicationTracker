@@ -25,13 +25,8 @@ def upload_to_drive(file_name):
     except Exception as e:
         messagebox.showerror("Error", f"Failed to upload to Google Drive: {str(e)}")
 
-def submit_application():
-    company = company_var.get()
-    title = title_var.get()
-    platform = platform_var.get()
-    status = status_var.get()
+def submit_application(company,title,platform,status,conn=None):
     submission_date = date.today()
-    conn = conn_var.get()
 
     if not company or not title or not platform or not status:
         messagebox.showerror("Error", "All fields except 'Connections' are required!")
@@ -55,32 +50,5 @@ def view_applications():
 """
 def show_analytics():
  Dave -- use pandas or matplotlib
+
 """
-# GUI setup
-root = Tk()
-root.title("JobApplications")
-
-Label(root, text="Company").grid(row=0, column=0)
-company_var = StringVar()
-Entry(root, textvariable=company_var).grid(row=0, column=1)
-
-Label(root, text="Job Title").grid(row=1, column=0)
-title_var = StringVar()
-Entry(root, textvariable=title_var).grid(row=1, column=1)
-
-Label(root, text="App Platform").grid(row=2, column=0)
-platform_var = StringVar()
-Entry(root, textvariable=platform_var).grid(row=2, column=1)
-
-Label(root, text="Application Status").grid(row=3, column=0)
-status_var = StringVar()
-OptionMenu(root, status_var, "Submitted", "Interviewing", "Offer Received", "Rejected").grid(row=3, column=1)
-
-Label(root, text="Connections").grid(row=4, column=0)
-conn_var = StringVar()
-Entry(root, textvariable=conn_var).grid(row=4, column=1)
-
-Button(root, text="Submit", command=submit_application).grid(row=5, column=0, columnspan=2)
-
-
-root.mainloop()
