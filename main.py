@@ -3,6 +3,7 @@ from tkinter import  ttk
 
 from matplotlib.pyplot import title
 
+import Application
 import appSubmission
 
 # Set up the window
@@ -37,12 +38,17 @@ Entry(add, textvariable=platform_var).grid(row=2, column=1)
 
 Label(add, text="Application Status").grid(row=3, column=0)
 status_var = StringVar()
+status_var.set("Options")
 OptionMenu(add, status_var, "Submitted", "Interviewing", "Offer Received", "Rejected").grid(row=3, column=1)
+
 
 Label(add, text="Connections").grid(row=4, column=0)
 conn_var = StringVar()
 Entry(add, textvariable=conn_var).grid(row=4, column=1)
-Button(add, text="Submit", command=lambda :appSubmission.submit_application(company_var,title_var,platform_var,status_var)).grid(row=5, column=0, columnspan=2)
+(Button(add, text="Submit",
+        # create an Application object before submitting it
+       command=lambda :appSubmission.submit_application(Application.Application(company_var.get(),title_var.get(),platform_var.get(),status_var.get())))
+       .grid(row=5, column=0, columnspan=2))
 
 # Run the application
 window.mainloop()
