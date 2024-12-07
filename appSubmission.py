@@ -1,8 +1,7 @@
-from tkinter import Toplevel, ttk, messagebox
+from tkinter import Tk, Label, Entry, Button, OptionMenu, StringVar, messagebox
+from tkinter import Toplevel, ttk
 from datetime import date
 import csv
-import pandas as pd
-import matplotlib.pyplot as plt
 from google_auth_oauthlib.flow import InstalledAppFlow
 from googleapiclient.discovery import build
 from googleapiclient.http import MediaFileUpload
@@ -12,10 +11,11 @@ from dataAnalysis import df, status_counts, source_counts, company_counts, appli
 
 # Google Drive Authentication
 def authenticate_user():
-@@ -41,14 +42,44 @@ def submit_application(company,title,platform,status,conn=None):
-upload_to_drive(file_name)
-except Exception as e:
-messagebox.showerror("Error", f"Failed to save application: {str(e)}")
+    SCOPES = ['https://www.googleapis.com/auth/drive.file']
+    flow = InstalledAppFlow.from_client_secrets_file('client_secret.json', SCOPES)
+    creds = flow.run_local_server(port=0)
+    return build('drive', 'v3', credentials=creds)
+
 
 def upload_to_drive(file_name):
     try:
@@ -26,6 +26,7 @@ def upload_to_drive(file_name):
         messagebox.showinfo("Success", "File uploaded to Google Drive!")
     except Exception as e:
         messagebox.showerror("Error", f"Failed to upload to Google Drive: {str(e)}")
+
 
 def submit_application(app):
     submission_date = date.today()
@@ -38,12 +39,19 @@ def submit_application(app):
     try:
         with open(file_name, mode='a', newline='') as file:
             writer = csv.writer(file)
-            writer.writerow([app.getCompany(), app.getTitle(), app.getPlatform(), app.getStatus(), submission_date, app.getConn()])
+            writer.writerow(
+                [app.getCompany(), app.getTitle(), app.getPlatform(), app.getStatus(), submission_date, app.getConn()])
         messagebox.showinfo("Success", "Application added successfully!")
         upload_to_drive(file_name)
     except Exception as e:
         messagebox.showerror("Error", f"Failed to save application: {str(e)}")
-        
+
+
+"""
+def view_applications():
+ Maybe lets use treeview for this one
+"""
+
 def show_data_analytics():
     plt.figure(figsize=(8, 6))
     status_counts.plot(kind='bar')
@@ -77,14 +85,3 @@ def show_data_analytics():
     plt.xticks(rotation=45)
     plt.tight_layout()
     plt.show()
-
-"""
-def view_applications():
-Maybe lets use treeview for this one
-"""
-
-"""
-def show_analytics():
- Dave -- use pandas or matplotlib
-
-"""
