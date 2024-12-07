@@ -1,10 +1,20 @@
 from tkinter import *
 from tkinter import  ttk
 
+from fontTools.ttx import process
 from matplotlib.pyplot import title
 
 import Application
 import appSubmission
+import pandas as pd
+
+def viewApp(event):
+       companyNameView.config(text = "Company: " + apps.loc[lb.curselection()[0],'Company'])
+       jobTitleView.config(text="Position: " + apps.loc[lb.curselection()[0], 'Position'])
+       dateView.config(text="Date Created: " + apps.loc[lb.curselection()[0], 'Date'])
+
+       
+
 
 # Set up the window
 window = Tk()
@@ -24,6 +34,7 @@ tabs.add(add, text="Add New Application")
 edit = ttk.Frame(tabs)
 tabs.add(edit, text="Update Applications")
 
+# Interface for adding applications:
 Label(add, text="Company").grid(row=0, column=0)
 company_var = StringVar()
 Entry(add, textvariable=company_var).grid(row=0, column=1)
@@ -41,7 +52,6 @@ status_var = StringVar()
 status_var.set("Options")
 OptionMenu(add, status_var, "Submitted", "Interviewing", "Offer Received", "Rejected").grid(row=3, column=1)
 
-
 Label(add, text="Connections").grid(row=4, column=0)
 conn_var = StringVar()
 Entry(add, textvariable=conn_var).grid(row=4, column=1)
@@ -49,6 +59,24 @@ Entry(add, textvariable=conn_var).grid(row=4, column=1)
         # create an Application object before submitting it
        command=lambda :appSubmission.submit_application(Application.Application(company_var.get(),title_var.get(),platform_var.get(),status_var.get())))
        .grid(row=5, column=0, columnspan=2))
+
+# Interface for viewing applications:
+lb=Listbox(view)
+apps = pd.read_csv("processed_applications.csv")
+for index, row in apps.iterrows():
+       lb.insert(index, row["Company"]+ ','+ row["Date"])
+
+lb.grid(row=0,column=0,rowspan = 3)
+lb.bind('<<ListboxSelect>>', viewApp)
+
+companyNameView = Label(view, text = "Company:")
+companyNameView.grid(row = 0, column =1)
+
+jobTitleView = Label(view, text = "Position:")
+jobTitleView.grid(row = 1, column =1)
+
+dateView = Label(view, text = "Date Created:")
+dateView.grid(row = 2, column =1)
 
 # Run the application
 window.mainloop()
