@@ -17,6 +17,33 @@ upload_to_drive(file_name)
 except Exception as e:
 messagebox.showerror("Error", f"Failed to save application: {str(e)}")
 
+def upload_to_drive(file_name):
+    try:
+        service = authenticate_user()
+        file_metadata = {'name': file_name}
+        media = MediaFileUpload(file_name, mimetype='text/csv')
+        service.files().create(body=file_metadata, media_body=media, fields='id').execute()
+        messagebox.showinfo("Success", "File uploaded to Google Drive!")
+    except Exception as e:
+        messagebox.showerror("Error", f"Failed to upload to Google Drive: {str(e)}")
+
+def submit_application(app):
+    submission_date = date.today()
+
+    if not app.getCompany() or not app.getTitle() or not app.getPlatform() or not app.getStatus():
+        messagebox.showerror("Error", "All fields except 'Connections' are required!")
+        return
+
+    file_name = "applications.csv"
+    try:
+        with open(file_name, mode='a', newline='') as file:
+            writer = csv.writer(file)
+            writer.writerow([app.getCompany(), app.getTitle(), app.getPlatform(), app.getStatus(), submission_date, app.getConn()])
+        messagebox.showinfo("Success", "Application added successfully!")
+        upload_to_drive(file_name)
+    except Exception as e:
+        messagebox.showerror("Error", f"Failed to save application: {str(e)}")
+        
 def show_data_analytics():
     plt.figure(figsize=(8, 6))
     status_counts.plot(kind='bar')
