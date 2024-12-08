@@ -2,14 +2,14 @@ from datetime import date
 from webbrowser import open_new
 
 class Application:
-    def __init__(companyName, self, jobTitle, method, submissionDate, connections, status = 'Submitted'):
+    def __init__(self,companyName, jobTitle, method, date=None, connections=None, status = 'Submitted'):
         self.__title = jobTitle                 # The title of the position being applied to (string)    
         self.__company = companyName            # The name of the company being applied to (string)
         self.__status = status                  # Current status of the application (string)
         self.__platform = method                # Where the application was submitted
-        self.__date = submissionDate            # When the application was submitted
         self.__conn = connections               # Any connections established at the company
-        self.__lastUpdated = date.today()       # The last time this particular application was updated
+        if not date:
+            self.__date = date.today()       # The last time this particular application was updated
 
     """
     def openResume(self):
