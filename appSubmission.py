@@ -2,11 +2,12 @@ from tkinter import Tk, Label, Entry, Button, OptionMenu, StringVar, messagebox
 from tkinter import Toplevel, ttk
 from datetime import date
 import csv
+import os
 from google_auth_oauthlib.flow import InstalledAppFlow
 from googleapiclient.discovery import build
 from googleapiclient.http import MediaFileUpload
 import matplotlib.pyplot as plt
-from dataAnalysis import df, status_counts, source_counts, company_counts, applications_timeline, grouped
+#from dataAnalysis import df, status_counts, source_counts, company_counts, applications_timeline, grouped
 
 
 # Google Drive Authentication
@@ -35,14 +36,23 @@ def submit_application(app):
         messagebox.showerror("Error", "All fields except 'Connections' are required!")
         return
 
-    file_name = "applications.csv"
+    file_name = "processed_applications.csv"
+    if os.path.exists(file_name):
+        with open(file_name, 'r') as file:
+            if file.readline()==None:
+                with open(file_name,'w') as writeFile:
+                    writeFile.write('Company,Position,Source,Status,Date,Contact Person')
+    else:
+        with open(file_name, 'w') as writeFile:
+            writeFile.write('Company,Position,Source,Status,Date,Contact Person')
+
     try:
         with open(file_name, mode='a', newline='') as file:
             writer = csv.writer(file)
             writer.writerow(
                 [app.getCompany(), app.getTitle(), app.getPlatform(), app.getStatus(), submission_date, app.getConn()])
         messagebox.showinfo("Success", "Application added successfully!")
-        upload_to_drive(file_name)
+        #upload_to_drive()
     except Exception as e:
         messagebox.showerror("Error", f"Failed to save application: {str(e)}")
 
