@@ -15,6 +15,9 @@ def viewApp(event):
            platformView.config(text="Last Updated: " + apps.loc[lb.curselection()[0], 'Source'])
            contactView.config(text="Contact: " + apps.loc[lb.curselection()[0], 'Contact Person'])
 
+# TODO: CREATE + ADD CODE TO CONNECT GOOGLE DRIVE BEFORE UI OPENS
+appSubmission.checkCSV("processed_applications.csv")
+
 # Set up the window
 window = Tk()
 #window.geometry("750x250")
