@@ -17,16 +17,15 @@ def authenticate_user():
     creds = flow.run_local_server(port=0)
     return build('drive', 'v3', credentials=creds)
 
-# check for the CSV file holding application data. If it does not exist or is not correctly formatted, fix that
 def checkCSV(file_name):
     if os.path.exists(file_name):
         with open(file_name, 'r') as file:
-            if file.readline() != 'Company,Position,Source,Status,Date,Contact Person':
+            if file.readline() != 'Company,Position,Source,Status,Date,Contact Person\n':
                 with open(file_name,'w') as writeFile:
-                    writeFile.write('Company,Position,Source,Status,Date,Contact Person')
+                    writeFile.write('Company,Position,Source,Status,Date,Contact Person\n')
     else:
         with open(file_name, 'w') as writeFile:
-            writeFile.write('Company,Position,Source,Status,Date,Contact Person')
+            writeFile.write('Company,Position,Source,Status,Date,Contact Person\n')
 
 def upload_to_drive(file_name):
     try:
