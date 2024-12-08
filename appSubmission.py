@@ -18,6 +18,12 @@ def authenticate_user():
     return build('drive', 'v3', credentials=creds)
 
 def checkCSV(file_name):
+    """
+    Check if the local CSV file exists, if not, create one:
+
+    :param file_name: name of CSV file to check for
+    :return:
+    """
     if os.path.exists(file_name):
         with open(file_name, 'r') as file:
             if file.readline() != 'Company,Position,Source,Status,Date,Contact Person\n':
@@ -28,6 +34,10 @@ def checkCSV(file_name):
             writeFile.write('Company,Position,Source,Status,Date,Contact Person\n')
 
 def upload_to_drive(file_name):
+    """
+    :param file_name: file to upload
+    :return:
+    """
     try:
         service = authenticate_user()
         file_metadata = {'name': file_name}
@@ -39,6 +49,12 @@ def upload_to_drive(file_name):
 
 
 def submit_application(app):
+    """
+    Add an application to the local CSV
+    :param app: Instance of application object to be added
+    :return:
+    """
+
     submission_date = date.today()
 
     if not app.getCompany() or not app.getTitle() or not app.getPlatform() or not app.getStatus():
@@ -52,7 +68,7 @@ def submit_application(app):
             writer = csv.writer(file)
             writer.writerow(
                 [app.getCompany(), app.getTitle(), app.getPlatform(), app.getStatus(), submission_date, app.getConn()])
-        messagebox.showinfo("Success", "Application added successfully!")
+        messagebox.showinfo("Success", "Applications updated successfully!")
         #upload_to_drive()
     except Exception as e:
         messagebox.showerror("Error", f"Failed to save application: {str(e)}")
