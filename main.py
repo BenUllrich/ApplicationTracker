@@ -5,6 +5,23 @@ import Application
 import appSubmission
 import pandas as pd
 
+def updateApp(event):
+    if lb.curselection():
+           return
+
+def refresh(arg=None):
+    global apps
+    if arg == 'newapp':
+        lb.delete(0, END)
+        lbUpdate.delete(0,END)
+        appSubmission.submit_application(
+            Application.Application(company_var.get(), title_var.get(), platform_var.get(), status_var.get(),
+                                    conn_var.get())
+        )
+        apps = pd.read_csv("processed_applications.csv")
+        for index, row in apps.iterrows():
+            lb.insert(index, f"{row['Company']:}  ({row['Date']:>})")
+            lbUpdate.insert(index, f"{row['Company']:}  ({row['Date']:>})")
 
 def viewApp(event):
     if lb.curselection():
@@ -38,7 +55,8 @@ tabs.add(edit, text="Update Applications")
 analysis = ttk.Frame(tabs)
 tabs.add(analysis, text="View Analysis")
 
-# Interface for adding applications:
+# ADDING APPLICATIONS
+# ---------------------------------------------------------------------------------
 Label(add, text="Company").grid(row=0, column=0)
 company_var = StringVar()
 Entry(add, textvariable=company_var).grid(row=0, column=1)
@@ -59,18 +77,17 @@ OptionMenu(add, status_var, "Submitted", "Interviewing", "Offer Received", "Reje
 Label(add, text="Connections").grid(row=4, column=0)
 conn_var = StringVar()
 Entry(add, textvariable=conn_var).grid(row=4, column=1)
-(Button(add, text="Submit",
+Button(add, text="Submit",
         # create an Application object before submitting it
-        command=lambda: appSubmission.submit_application(
-            Application.Application(company_var.get(), title_var.get(), platform_var.get(), status_var.get(), conn_var.get())
-            )).grid(row=5, column=0, columnspan=2))
+        command=lambda: refresh('newapp')).grid(row=5, column=0, columnspan=2)
 
-# Interface for viewing applications:
+# VIEWING APPLICATIONS:
+# ---------------------------------------------------------------------------------
+
 lb = Listbox(view, width= 30, height = 15)
 apps = pd.read_csv("processed_applications.csv")
 for index, row in apps.iterrows():
     lb.insert(index, f"{row['Company']:}  ({row['Date']:>})")
-
 
 lb.grid(row=0, column=0, rowspan=3)
 lb.bind('<<ListboxSelect>>', viewApp)
@@ -94,6 +111,18 @@ contactView = Label(view,padx = 5, text="Contact: ")
 contactView.grid(sticky = W,row=2, column=2)
 
 lb.select_set(0)
+
+
+# UPDATE APPLICATIONS
+# ---------------------------------------------------------------------------------
+lbUpdate = Listbox(edit, width= 30, height = 15)
+apps = pd.read_csv("processed_applications.csv")
+for index, row in apps.iterrows():
+    lbUpdate.insert(index, f"{row['Company']:}  ({row['Date']:>})")
+
+lbUpdate.grid(row=0, column=0, rowspan=3)
+lbUpdate.bind('<<ListboxSelect>>', updateApp)
+
 
 # Run the application
 window.mainloop()
