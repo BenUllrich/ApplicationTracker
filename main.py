@@ -59,7 +59,7 @@ Entry(add, textvariable=conn_var).grid(row=4, column=1)
 (Button(add, text="Submit",
         # create an Application object before submitting it
         command=lambda: appSubmission.submit_application(
-            Application.Application(company_var.get(), title_var.get(), platform_var.get(), status_var.get())
+            Application.Application(company_var.get(), title_var.get(), platform_var.get(), status_var.get(), conn_var.get())
             )).grid(row=5, column=0, columnspan=2))
 
 # Interface for viewing applications:
@@ -94,3 +94,4 @@ lb.select_set(0)
 
 # Run the application
 window.mainloop()
+appSubmission.upload_to_drive("processed_applications.csv")
