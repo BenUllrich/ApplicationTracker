@@ -4,8 +4,7 @@ from tkinter import ttk
 import Application
 import appSubmission
 import pandas as pd
-
-#import dataAnalysis
+from dataAnalysis import dataAnalysis
 
 def updateApp(event):
     """
@@ -29,6 +28,7 @@ def refresh(arg=None):
     :return:
     """
     global apps
+    global analytics
     if arg == 'newapp':
         # clear listboxes:
         lb.delete(0, END)
@@ -80,6 +80,8 @@ def refresh(arg=None):
                 lb.insert(i, f"{row['Company']:}  ({row['Date']:>})")
                 lbUpdate.insert(i, f"{row['Company']:}  ({row['Date']:>})")
 
+
+
 def viewApp(event):
     """
     Updates the information fields when a new application is selected in the view tab
@@ -104,7 +106,10 @@ def viewApp(event):
 
 
 # TODO: CREATE + ADD CODE TO CONNECT GOOGLE DRIVE BEFORE UI OPENS
+
+# check for csv, then create an object for data analysis
 appSubmission.checkCSV("processed_applications.csv")
+analytics = dataAnalysis("processed_applications.csv")
 
 # Set up the window
 window = Tk()
@@ -214,21 +219,23 @@ lbUpdate.select_set(0)
 # DATA ANALYSIS
 # ---------------------------------------------------------------------------------
 Button(analysis, text="Applications by Status",height=3, width=20,
-       # command=lambda:
+       command=lambda: analytics.show_status_counts()
        ).grid(row = 1, column =1, padx = (100,5), pady =5)
 Button(analysis, text="Applications by Source",height=3, width=20,
-      #  command=lambda:
+       command=lambda: analytics.show_source_counts()
        ).grid(row = 1, column =2, padx = (5,100), pady =5)
 Button(analysis, text="Applications by Company",height=3, width=20,
      #   command=lambda:
        ).grid(row = 2, column =1, padx = (100,5), pady =5)
 Button(analysis, text="Applications Timeline",height=3, width=20,
-    #    command=lambda:
+       command=lambda: analytics.show_timeline()
        ).grid(row = 2, column =2, padx = (5,100), pady =5)
 Button(analysis, text="Application\nStatus + Source",height=3, width=20,
-    #    command=lambda:
+       command=lambda: analytics.show_status_source()
        ).grid(row = 3, column =1, columnspan=2, pady =5)
 
 # Run the application
 window.mainloop()
+
+# when UI is closed, attempt to upload csv to drive
 appSubmission.upload_to_drive("processed_applications.csv")
