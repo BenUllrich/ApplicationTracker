@@ -1,5 +1,4 @@
-from tkinter import Tk, Label, Entry, Button, OptionMenu, StringVar, messagebox
-from tkinter import Toplevel, ttk
+from tkinter import messagebox
 from datetime import date
 import csv
 import os
@@ -7,7 +6,6 @@ from google_auth_oauthlib.flow import InstalledAppFlow
 from googleapiclient.discovery import build
 from googleapiclient.http import MediaFileUpload
 import matplotlib.pyplot as plt
-#from dataAnalysis import df, status_counts, source_counts, company_counts, applications_timeline, grouped
 
 
 # Google Drive Authentication
