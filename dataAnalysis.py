@@ -14,7 +14,7 @@ class dataAnalysis:
         self.__source_counts = self.__applications['Source'].value_counts()
         self.__applications_timeline = self.__applications['Date'].value_counts().sort_index()
         self.__grouped = self.__applications.groupby(['Status', 'Source']).size().unstack()
-        #self.__company_counts = self.__applications['Company'].value_counts()
+        self.__company_counts = self.__applications['Company'].value_counts()
         if self.__applications.empty:
             print("No data available for analysis.")
             return
@@ -66,4 +66,11 @@ class dataAnalysis:
         plt.tight_layout()
         plt.show()
 
-   
+    def show_company_counts(self):
+        self.__company_counts.plot(kind='bar', figsize=(12, 8), color='skyblue')
+        plt.title("Applications by Company")
+        plt.xlabel("Company")
+        plt.ylabel("Number of Applications")
+        plt.xticks(rotation=45)
+        plt.tight_layout()
+        plt.show()
