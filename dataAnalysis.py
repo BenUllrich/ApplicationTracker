@@ -11,6 +11,10 @@ class dataAnalysis:
         except Exception as e:
             print(f"An error occurred while reading the file: {e}")
         self.__status_counts = self.__applications['Status'].value_counts()
+        self.__source_counts = self.__applications['Source'].value_counts()
+        self.__applications_timeline = self.__applications['Date'].value_counts().sort_index()
+        self.__grouped = self.__applications.groupby(['Status', 'Source']).size().unstack()
+        #self.__company_counts = self.__applications['Company'].value_counts()
         if self.__applications.empty:
             print("No data available for analysis.")
             return
@@ -62,8 +66,4 @@ class dataAnalysis:
         plt.tight_layout()
         plt.show()
 
-
-
-
-
-
+   
