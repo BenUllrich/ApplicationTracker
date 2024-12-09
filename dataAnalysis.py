@@ -1,66 +1,33 @@
 import pandas as pd
 import matplotlib.pyplot as plt
+from tkinter import messagebox
 
-# Function to load the data from the CSV file
-def load_data(file_name="applications.csv"):
-    """
-    Load data from the specified CSV file.
-    Args:
-        file_name (str): Path to the CSV file.
-    Returns:
-        DataFrame: The loaded data as a pandas DataFrame.
-    """
-    try:
-        # Load the CSV file into a DataFrame
-        df = pd.read_csv(file_name)
-
-        # Clean column names
-        df.columns = df.columns.str.strip()  # Remove spaces
-        df.columns = df.columns.str.title()  # Title case for consistency
-
-        # Ensure the 'Date' column is parsed as datetime
-        if 'Date' in df.columns:
-            df['Date'] = pd.to_datetime(df['Date'], errors='coerce')  # Convert to datetime, handling errors
+class dataAnalysis:
+    def __init__(self,csvName):
+        try:
+            self.__applications = pd.read_csv(csvName)
+        except FileNotFoundError:
+            print(f"Error: {csvName} not found.")
+        except Exception as e:
+            print(f"An error occurred while reading the file: {e}")
+        self.__status_counts = self.__applications['Status'].value_counts()
+        if self.__applications.empty:
+            print("No data available for analysis.")
+            return
+        elif 'Status' not in self.__applications.columns:
+            messagebox.showerror("Error", "'Status' column is missing in the data.")
+            return
+        elif 'Date' in self.__applications.columns:
+            self.__applications['Date'] = pd.to_datetime(self.__applications['Date'], errors='coerce')  # Convert to datetime, handling errors
         else:
-            print("Warning: 'Date' column is missing from the CSV file.")
+            messagebox.showerror("Error", "Dates Missing from .CSV file")
 
-        return df
-    except FileNotFoundError:
-        print(f"Error: {file_name} not found.")
-        return pd.DataFrame()  # Return an empty DataFrame if the file is not found
-    except Exception as e:
-        print(f"An error occurred while reading the file: {e}")
-        return pd.DataFrame()
-
-
-# Example usage
-if __name__ == "__main__":
-    # Path to the CSV file
-    file_path = "applications.csv"  # Ensure the file name matches your CSV file
-
-    # Load the data
-    df = load_data(file_path)
-
-    # Print loaded data and columns for debugging
-    print(df.head())
-    print(df.columns)
-
-    # Analysis functions
-    def show_status_counts(data):
+    def show_status_counts(self):
         """
         Display a bar chart of application status counts.
         """
-        if 'Status' not in data.columns:
-            print("Error: 'Status' column is missing in the data.")
-            return
-
-        if data.empty:
-            print("No data available for analysis.")
-            return
-
-        status_counts = data['Status'].value_counts()
         plt.figure(figsize=(8, 6))
-        status_counts.plot(kind='bar', color='skyblue')
+        self.__status_counts.plot(kind='bar', color='skyblue')
         plt.title("Application Status Count")
         plt.xlabel("Status")
         plt.ylabel("Number of Applications")
@@ -68,5 +35,35 @@ if __name__ == "__main__":
         plt.tight_layout()
         plt.show()
 
-    # Call the analysis function
-    show_status_counts(df)
+    def show_timeline(self):
+        plt.figure(figsize=(10, 6))
+        self.__applications_timeline.plot(kind='line', marker='o')
+        plt.title("Applications Over Time")
+        plt.xlabel("Date")
+        plt.ylabel("Number of Applications")
+        plt.grid(True)
+        plt.tight_layout()
+        plt.show()
+
+    def show_source_counts(self):
+        plt.figure(figsize=(8, 6))
+        self.__source_counts.plot(kind='pie', autopct='%1.1f%%', startangle=140)
+        plt.title("Applications by Source")
+        plt.ylabel("")  # Hide y-label for a cleaner look
+        plt.tight_layout()
+        plt.show()
+
+    def show_status_source(self):
+        self.__grouped.plot(kind='bar', figsize=(12, 8))
+        plt.title("Applications Grouped by Status and Source")
+        plt.xlabel("Status")
+        plt.ylabel("Number of Applications")
+        plt.xticks(rotation=45)
+        plt.tight_layout()
+        plt.show()
+
+
+
+
+
+
