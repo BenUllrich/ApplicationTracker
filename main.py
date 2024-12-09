@@ -80,6 +80,7 @@ def refresh(arg=None):
                 lb.insert(i, f"{row['Company']:}  ({row['Date']:>})")
                 lbUpdate.insert(i, f"{row['Company']:}  ({row['Date']:>})")
 
+    analytics = dataAnalysis("processed_applications.csv")
 
 
 def viewApp(event):
