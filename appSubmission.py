@@ -75,7 +75,7 @@ def submit_application(app):
 """
 def view_applications():
  Maybe lets use treeview for this one
-"""
+
 
 def show_data_analytics():
     plt.figure(figsize=(8, 6))
@@ -110,3 +110,4 @@ def show_data_analytics():
     plt.xticks(rotation=45)
     plt.tight_layout()
     plt.show()
+"""
