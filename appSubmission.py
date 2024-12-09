@@ -72,42 +72,4 @@ def submit_application(app):
         messagebox.showerror("Error", f"Failed to save application: {str(e)}")
 
 
-"""
-def view_applications():
- Maybe lets use treeview for this one
 
-
-def show_data_analytics():
-    plt.figure(figsize=(8, 6))
-    status_counts.plot(kind='bar')
-    plt.title('Application Status Count')
-    plt.xlabel('Status')
-    plt.ylabel('Number of Applications')
-    plt.xticks(rotation=45)
-    plt.tight_layout()
-    plt.show()
-
-    plt.figure(figsize=(8, 6))
-    source_counts.plot(kind='pie', autopct='%1.1f%%', startangle=140)
-    plt.title("Applications by Source")
-    plt.ylabel("")  # Hide y-label for a cleaner look
-    plt.tight_layout()
-    plt.show()
-
-    plt.figure(figsize=(10, 6))
-    applications_timeline.plot(kind='line', marker='o')
-    plt.title("Applications Over Time")
-    plt.xlabel("Date")
-    plt.ylabel("Number of Applications")
-    plt.grid(True)
-    plt.tight_layout()
-    plt.show()
-
-    grouped.plot(kind='bar', figsize=(12, 8))
-    plt.title("Applications Grouped by Status and Source")
-    plt.xlabel("Status")
-    plt.ylabel("Number of Applications")
-    plt.xticks(rotation=45)
-    plt.tight_layout()
-    plt.show()
-"""
