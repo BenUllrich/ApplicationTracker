@@ -1,14 +1,13 @@
 from datetime import date
-from webbrowser import open_new
 
 class Application:
-    def __init__(self,companyName, jobTitle, method, date=None, connections=None, status = 'Submitted'):
+    def __init__(self,companyName, jobTitle, method,status = 'Submitted', connections=None,lastUpdate=None ):
         self.__title = jobTitle                 # The title of the position being applied to (string)    
         self.__company = companyName            # The name of the company being applied to (string)
         self.__status = status                  # Current status of the application (string)
         self.__platform = method                # Where the application was submitted
         self.__conn = connections               # Any connections established at the company
-        if not date:
+        if not lastUpdate:
             self.__date = date.today()       # The last time this particular application was updated
 
     """
