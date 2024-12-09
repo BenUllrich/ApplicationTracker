@@ -225,7 +225,7 @@ Button(analysis, text="Applications by Source",height=3, width=20,
        command=lambda: analytics.show_source_counts()
        ).grid(row = 1, column =2, padx = (5,100), pady =5)
 Button(analysis, text="Applications by Company",height=3, width=20,
-     #   command=lambda:
+       command=lambda: analytics.show_company_counts()
        ).grid(row = 2, column =1, padx = (100,5), pady =5)
 Button(analysis, text="Applications Timeline",height=3, width=20,
        command=lambda: analytics.show_timeline()
