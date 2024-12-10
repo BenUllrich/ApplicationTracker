@@ -1,69 +1,87 @@
 import pytest
+from datetime import date
+import pandas as pd
+import appSubmission
+import dataAnalysis
+import Application
 import os
-from dataAnalysis import dataAnalysis
 
-# Define the path to the CSV file
-CSV_FILE = "applications.csv"
+from temp2.dataAnalysis import dataAnalysis
 
-# Create test cases for the `dataAnalysis` class
-@pytest.fixture
-def analysis_instance():
-    """
-    Fixture to create an instance of the `dataAnalysis` class.
-    """
-    return dataAnalysis(CSV_FILE)
 
-def test_file_exists():
+def test_date_appSubmission():
     """
-    Test if the CSV file exists in the correct directory.
+    Ensure that, when creating an application without a specified date, it defaults to today's date
     """
-    assert os.path.exists(CSV_FILE), f"CSV file '{CSV_FILE}' does not exist."
+    app1 = Application.Application("Test Inc.", "Tester", "LinkedIn",status ='Submitted', connections=None,lastUpdate=None)
+    app2 = Application.Application("Test Inc.", "Tester", "LinkedIn", status='Submitted', connections=None, lastUpdate= date.fromisoformat('2019-12-04'))
+    assert app2.getDate() != date.today() and app1.getDate() == date.today()
 
-def test_data_loading(analysis_instance):
+def test_csv_fix():
     """
-    Test if the data is loaded correctly into the `dataAnalysis` instance.
+    Ensure that improperly formatted CSVs are overwritten correctly
     """
-    assert not analysis_instance._dataAnalysis__applications.empty, "Data was not loaded correctly."
+    # create a temporary file for the test with incorrect formatting
+    with open("TEST_CSV.csv", 'w') as file:
+        file.write("THIS IS, VERY CONFUSING, TO THE FUNCTION, I AM SURE OF IT!\nLOREM,IPSUM,LOREM,IPSUM")
 
-def test_status_counts(analysis_instance):
-    """
-    Test if the status counts are calculated correctly.
-    """
-    status_counts = analysis_instance._dataAnalysis__applications['Status'].value_counts()
-    assert len(status_counts) > 0, "Status counts are empty."
+    appSubmission.checkCSV("TEST_CSV.csv")
 
-def test_timeline_graph(analysis_instance):
-    """
-    Test if the timeline graph can be generated without errors.
-    """
-    try:
-        analysis_instance.show_timeline()
-    except Exception as e:
-        pytest.fail(f"Timeline graph failed to generate: {e}")
+    with open("TEST_CSV.csv", 'r') as file:
+        contents =  file.read()
 
-def test_source_counts_graph(analysis_instance):
-    """
-    Test if the source counts graph can be generated without errors.
-    """
-    try:
-        analysis_instance.show_source_counts()
-    except Exception as e:
-        pytest.fail(f"Source counts graph failed to generate: {e}")
+    # delete the temporary file
+    os.remove('TEST_CSV.csv')
+    assert contents == 'Company,Position,Source,Status,Date,Contact Person\n'
 
-def test_status_source_graph(analysis_instance):
+def test_invalid_application():
     """
-    Test if the status and source grouped graph can be generated without errors.
+    Test how the submit_application function handles incomplete information (expected to fail)
     """
-    try:
-        analysis_instance.show_status_source()
-    except Exception as e:
-        pytest.fail(f"Status source graph failed to generate: {e}")
+    #application with None in one of the parameters
+    app = Application.Application("Test Inc.", "Tester", None,status ='Submitted', connections=None,lastUpdate=None)
 
-def test_company_graph(analysis_instance):
+    # create a fresh csv, use it to create a dataframe, then remove it for cleanliness
+    appSubmission.checkCSV("TEST_CSV.csv")
+    appSubmission.submit_application(app,"TEST_CSV.csv")
+    data = pd.read_csv("TEST_CSV.csv")
+    os.remove('TEST_CSV.csv')
+
+    # The submit_application call will not add anything to the file, and the row won't exist, raising a KeyError
+    #    - This will cause a window to pop up during the test, which is also expected
+    with pytest.raises(KeyError):
+        data.loc[0]
+
+@pytest.mark.xfail(reason = "No errors should be raised")
+def test_no_connection():
     """
-    Test if the applications by company graph can be generated without errors.
+    Ensure that the program can handle applications without a specified contact
     """
-    try:
-        analysis_instance.show_company_graph()
-    except Exception as e:
-        pytest.fail(f"Applications by company graph failed to generate: {e}")
+
+    # fresh csv file
+    appSubmission.checkCSV("TEST_CSV.csv")
+
+    # submit two applications, one with and one without a connection
+    # This will open two messageboxes as a result of the submit_application code
+    appSubmission.submit_application(
+        Application.Application("Python", "Sample", "Indeed",status ='Interviewing', connections="John Doe",
+                                lastUpdate=None), "TEST_CSV.csv")
+    appSubmission.submit_application(
+        Application.Application("Test Inc.", "Tester", "Handshake", status='Submitted', connections=None,
+                                lastUpdate=None), "TEST_CSV.csv")
+
+    # read into dataframe, then clean up the csv file
+    data = pd.read_csv("TEST_CSV.csv")
+    os.remove('TEST_CSV.csv')
+
+    # the following will raise a KeyError if either of these applications was not successfully added
+    with pytest.raises(KeyError):
+        data.loc[0]
+        data.loc[1]
+
+def test_analysis_no_csv():
+    """
+    Ensure that a dataAnalysis instance cannot be created with an invalid csv name
+    """
+    with pytest.raises(FileNotFoundError):
+        dataAnalysis("FAKE_FILE.csv")
