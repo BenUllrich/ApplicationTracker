@@ -1,3 +1,7 @@
+# Author: Benjamin Ullrich, Dhavan Antala, Om Gaikwad
+# Date: December 10, 2024
+# Description: Class used to organize and pass application information between functions
+
 from datetime import date
 
 class Application:
