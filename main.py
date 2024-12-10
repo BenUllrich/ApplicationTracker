@@ -1,3 +1,4 @@
+import tkinter.messagebox
 from tkinter import *
 from tkinter import ttk
 
@@ -29,6 +30,7 @@ def refresh(arg=None):
     """
     global apps
     global analytics
+
     if arg == 'newapp':
         # clear listboxes:
         lb.delete(0, END)
@@ -45,8 +47,26 @@ def refresh(arg=None):
         for index, row in apps.iterrows():
             lb.insert(index, f"{row['Company']:}  ({row['Date']:>})")
             lbUpdate.insert(index, f"{row['Company']:}  ({row['Date']:>})")
+    elif arg == 'delete':
+        index = lbUpdate.curselection()[0]
 
-    if arg == 'update':
+        # clear listboxes:
+        lb.delete(0, END)
+        lbUpdate.delete(0, END)
+
+        # Remove the application and re-create the local CSV
+        apps.drop(index, inplace=True)
+        apps.to_csv("processed_applications.csv", index=False)
+
+        # update listboxes
+        apps = pd.read_csv("processed_applications.csv")
+        for i, row in apps.iterrows():
+            lb.insert(i, f"{row['Company']:}  ({row['Date']:>})")
+            lbUpdate.insert(i, f"{row['Company']:}  ({row['Date']:>})")
+
+        tkinter.messagebox.showinfo("Success", "Application deleted successfully")
+
+    elif arg == 'update':
         # make sure an application is selected before trying to update it
         if lbUpdate.curselection():
             index = lbUpdate.curselection()[0]
@@ -133,31 +153,39 @@ tabs.add(analysis, text="View Analysis")
 
 # ADDING APPLICATIONS
 # ---------------------------------------------------------------------------------
-Label(add, text="Company").grid(row=0, column=1,pady=10)
+
+# set company
+Label(add, text="Company").grid(row=0, column=1,pady=10,padx = (150,4))
 company_var = StringVar()
 Entry(add, textvariable=company_var).grid(row=0, column=2,pady=10)
 
-Label(add, text="Job Title").grid(row=1, column=1,pady=10)
+# set job title
+Label(add, text="Job Title").grid(row=1, column=1,pady=10,padx = (150,4))
 title_var = StringVar()
 Entry(add, textvariable=title_var).grid(row=1, column=2,pady=10)
 
-Label(add, text="App Platform").grid(row=2, column=1,pady=10)
+# set platform
+Label(add, text="App Platform").grid(row=2, column=1,padx = (150,4))
 platform_var = StringVar()
 Entry(add, textvariable=platform_var).grid(row=2, column=2, pady=10)
 
-Label(add, text="Application Status").grid(row=3, column=1, padx = 4)
+#set status (with OptionMenu)
+Label(add, text="Application Status").grid(row=3, column=1, padx = (150,4))
 status_var = StringVar()
 status_var.set("Options")
 options = OptionMenu(add, status_var, "Submitted", "Interviewing", "Offer Received", "Rejected")
 options.config(width = 12)
 options.grid(row=3, column=2,pady=10)
 
-Label(add, text="Connections").grid(row=4, column=1,pady=10)
+# include connections
+Label(add, text="Connections").grid(row=4, column=1,pady=10,padx = (150,4))
 conn_var = StringVar()
 Entry(add, textvariable=conn_var).grid(row=4, column=2,pady=10)
+
+# submit using refresh function
 Button(add, text="Submit", padx = 15,
         # run the refresh function to create the new application
-        command=lambda: refresh('newapp')).grid(row=5, column=1, columnspan=2,pady=10)
+        command=lambda: refresh('newapp')).grid(row=5, column=2, columnspan=2,pady=10)
 
 # VIEWING APPLICATIONS:
 # ---------------------------------------------------------------------------------
@@ -170,6 +198,8 @@ for index, row in apps.iterrows():
 
 lb.grid(row=0, column=0, rowspan=3)
 lb.bind('<<ListboxSelect>>', viewApp)
+
+# populate all data fields:
 
 companyNameView = Label(view, text="Company: ")
 companyNameView.grid(sticky = W, row=0, column=1)
@@ -189,48 +219,60 @@ platformView.grid(sticky = W,row=2, column=1)
 contactView = Label(view,padx = 5, text="Contact: ")
 contactView.grid(sticky = W,row=2, column=2)
 
-lb.select_set(0)
 
 
 # UPDATE APPLICATIONS
 # ---------------------------------------------------------------------------------
+
+
+# populate initial listbox
 lbUpdate = Listbox(edit, width= 30, height = 15)
 apps = pd.read_csv("processed_applications.csv")
 for index, row in apps.iterrows():
     lbUpdate.insert(index, f"{row['Company']:}  ({row['Date']:>})")
+lbUpdate.grid(row=0, column=0, rowspan=3)
+lbUpdate.bind('<<ListboxSelect>>', updateApp)
 
+# new connection entry and label:
 Label(edit, text="New Connection:").grid(row=0, column=1)
 editConn_var = StringVar()
-
 updateEntry = Entry(edit, textvariable=editConn_var)
 updateEntry.grid(row=0, column=2)
 
+# new status menu and label
 Label(edit, text="Update Application Status").grid(row=1, column=1)
 editStatus_var = StringVar()
 status_var.set("Options")
 OptionMenu(edit, editStatus_var, "Submitted", "Interviewing", "Offer Received", "Rejected").grid(row=1, column=2)
 
-lbUpdate.grid(row=0, column=0, rowspan=3)
-lbUpdate.bind('<<ListboxSelect>>', updateApp)
-Button(edit, text="Update",
-        command=lambda: refresh('update')).grid(row=5, column=0, columnspan=3)
+# both update and delete call the refresh function with different params
+Button(edit, text="Update", padx = 30,
+        command=lambda: refresh('update')).grid(row=5, column=2, pady = (12,1), columnspan=2)
+Button(edit, text="Delete", padx = 30,
+        command=lambda: refresh('delete')).grid(row=5, column=0, pady = (12,1))
 
-lbUpdate.select_set(0)
 
 # DATA ANALYSIS
 # ---------------------------------------------------------------------------------
+
+# each button will call the respective function with the current instance of dataAnalysis
+
 Button(analysis, text="Applications by Status",height=3, width=20,
        command=lambda: analytics.show_status_counts()
        ).grid(row = 1, column =1, padx = (100,5), pady =5)
+
 Button(analysis, text="Applications by Source",height=3, width=20,
        command=lambda: analytics.show_source_counts()
        ).grid(row = 1, column =2, padx = (5,100), pady =5)
+
 Button(analysis, text="Applications by Company",height=3, width=20,
        command=lambda: analytics.show_company_counts()
        ).grid(row = 2, column =1, padx = (100,5), pady =5)
+
 Button(analysis, text="Applications Timeline",height=3, width=20,
        command=lambda: analytics.show_timeline()
        ).grid(row = 2, column =2, padx = (5,100), pady =5)
+
 Button(analysis, text="Application\nStatus + Source",height=3, width=20,
        command=lambda: analytics.show_status_source()
        ).grid(row = 3, column =1, columnspan=2, pady =5)
