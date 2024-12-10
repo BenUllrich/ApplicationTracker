@@ -45,14 +45,14 @@ def upload_to_drive(file_name):
         messagebox.showerror("Error", f"Failed to upload to Google Drive: {str(e)}")
 
 
-def submit_application(app):
+def submit_application(app, fileName):
     """
     Add an application to the local CSV
     :param app: Instance of application object to be added
     :return:
     """
-    
-    file_name = "processed_applications.csv"
+
+    file_name = fileName
     submission_date = date.today() # using current date to accurately update
 
     # ensure data fields are present
