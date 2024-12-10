@@ -2,11 +2,9 @@ import pytest
 from datetime import date
 import pandas as pd
 import appSubmission
-import dataAnalysis
 import Application
 import os
-
-from temp2.dataAnalysis import dataAnalysis
+from dataAnalysis import dataAnalysis
 
 
 def test_date_appSubmission():
