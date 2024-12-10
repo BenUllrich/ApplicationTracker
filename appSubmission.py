@@ -5,7 +5,6 @@ import os
 from google_auth_oauthlib.flow import InstalledAppFlow
 from googleapiclient.discovery import build
 from googleapiclient.http import MediaFileUpload
-import matplotlib.pyplot as plt
 
 
 # Google Drive Authentication
@@ -52,24 +51,23 @@ def submit_application(app):
     :param app: Instance of application object to be added
     :return:
     """
+    
+    file_name = "processed_applications.csv"
+    submission_date = date.today() # using current date to accurately update
 
-    submission_date = date.today()
-
+    # ensure data fields are present
     if not app.getCompany() or not app.getTitle() or not app.getPlatform() or not app.getStatus():
         messagebox.showerror("Error", "All fields except 'Connections' are required!")
         return
 
-    file_name = "processed_applications.csv"
-
+    # write new row to csv file using application information
     try:
         with open(file_name, mode='a', newline='') as file:
             writer = csv.writer(file)
             writer.writerow(
                 [app.getCompany(), app.getTitle(), app.getPlatform(), app.getStatus(), submission_date, app.getConn()])
         messagebox.showinfo("Success", "Applications updated successfully!")
-        #upload_to_drive()
     except Exception as e:
         messagebox.showerror("Error", f"Failed to save application: {str(e)}")
-
 
 
