@@ -1,20 +1,17 @@
 import pandas as pd
 import matplotlib.pyplot as plt
+import os
 from tkinter import messagebox
 
 class dataAnalysis:
     def __init__(self,csvName):
+        if not os.path.exists(csvName):
+            raise FileNotFoundError
         try:
             self.__applications = pd.read_csv(csvName)
-        except FileNotFoundError:
-            print(f"Error: {csvName} not found.")
         except Exception as e:
             print(f"An error occurred while reading the file: {e}")
-        self.__status_counts = self.__applications['Status'].value_counts()
-        self.__source_counts = self.__applications['Source'].value_counts()
-        self.__applications_timeline = self.__applications['Date'].value_counts().sort_index()
-        self.__grouped = self.__applications.groupby(['Status', 'Source']).size().unstack()
-        self.__company_counts = self.__applications['Company'].value_counts()
+            return
         if self.__applications.empty:
             print("No data available for analysis.")
             return
@@ -25,6 +22,12 @@ class dataAnalysis:
             self.__applications['Date'] = pd.to_datetime(self.__applications['Date'], errors='coerce')  # Convert to datetime, handling errors
         else:
             messagebox.showerror("Error", "Dates Missing from .CSV file")
+
+        self.__status_counts = self.__applications['Status'].value_counts()
+        self.__source_counts = self.__applications['Source'].value_counts()
+        self.__applications_timeline = self.__applications['Date'].value_counts().sort_index()
+        self.__grouped = self.__applications.groupby(['Status', 'Source']).size().unstack()
+        self.__company_counts = self.__applications['Company'].value_counts()
 
     def show_status_counts(self):
         """
