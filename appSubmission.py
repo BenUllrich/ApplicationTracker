@@ -1,3 +1,7 @@
+# Author: Benjamin Ullrich, Dhavan Antala, Om Gaikwad
+# Date: December 10, 2024
+# Description: Functions used to handle CSV file management and Google Drive integration
+
 from tkinter import messagebox
 from datetime import date
 import csv
