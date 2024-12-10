@@ -1,6 +1,6 @@
 # Author: Benjamin Ullrich, Dhavan Antala, Om Gaikwad
 # Date: December 10, 2024
-# Description: A series of tests for the Application Tracker functionality
+# Description: A series of tests (using pytest) for the Application Tracker functionality
 
 import pytest
 from datetime import date
