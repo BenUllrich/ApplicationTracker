@@ -1,29 +1,24 @@
 # Application Tracker
-## Ben Ullrich, Dhavan Antala, and Om Gaikwad
+### Ben Ullrich, Dhavan Antala, and Om Gaikwad
 
-To Do List:
-- [ ] UI
-  - [ ] Applications Menu
-    - [ ] List applications from csv/google sheets file (pandas)
-    - [ ] Update/edit applications (pandas)
-- [ ] Google drive API functionality
-  - [ ] Read CSV into pandas
-  - [ ] create new CSV if file doesn't exist
-- [ ] Testing
+## Dependencies:
+- pandas
+- google-auth
+- google-auth-oauthlib
+- google-auth-httplib2
+- google-api-python-client
+- matplotlib
 
 ## Functionality Description:
-- On launch, You will be prompted to sign in to Google Drive
-- Using the Google Sheets API, the app will download the existing spreadsheet from drive
+- On launch, user will be prompted to sign in to Google Drive
+- Using the Google Drive API, the app will download the existing spreadsheet from the user's drive
   - If not found, a blank local csv will be created
 - Each row in this sheet will store an instance of the Application Object
   - This object will be used to store information about each individual application, as well as handle tasks such as adding information, updating the status, deleting the application, etc.
 - The user will be able to view, edit, and create new applications, which will be added to the active pandas dataframe, then uploaded to Google Drive when the UI is closed
-  - The user will be notified if this is not successful. No data will be lost from the existing file
+  - The user will be notified if this is not successful.
 
-# Dependencies:
-
-
-# UI Layout
+## UI Layout
 ### View Applications
 - Table list of all applications
    - Select to view Job Title | Company | Last Update | Status | Connections
