@@ -10,9 +10,12 @@
 - matplotlib
 
 ## To Run:
+#### In Any Directory
 > git clone https://github.com/BenUllrich/ApplicationTracker
-#### In Directory ApplicationTracker:
+#### In New Directory ApplicationTracker:
 > Python main.py
+
+- Note: All necessary libraries must be installed
 
 ## Functionality Description:
 - On launch, user will be prompted to sign in to Google Drive
