@@ -43,7 +43,7 @@ class Application:
         self.__platform=platform
     def setDate(self,date):
         self.__date=date
-    def setConn(self):
-        return self.__conn
+    def setConn(self,contact):
+         self.__conn = contact
     def setLastUpdate(self,lastUpdate):
         self.__lastUpdated = lastUpdate
