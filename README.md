@@ -13,41 +13,35 @@ To Do List:
 
 ## Functionality Description:
 - On launch, You will be prompted to sign in to Google Drive
-- Using the Google Sheets API, the app will open an existing spreadsheet (or create a new one if it does not yet exist)
+- Using the Google Sheets API, the app will download the existing spreadsheet from drive
+  - If not found, a blank local csv will be created
 - Each row in this sheet will store an instance of the Application Object
   - This object will be used to store information about each individual application, as well as handle tasks such as adding information, updating the status, deleting the application, etc.
-- The user will be able to view, edit, and create new applications, which will be added to the active pandas dataframe, then uploaded to Google Drive
-- We can try an autosave feature, but for now, we should focus on a "Save" button to update the spreadsheet
-# Tech Stack
-## Frontend UI:
-- tkinter
-## Backend:
-- Python for API calls.
-## Database:
-- Use pandas / SQLite for storing user data, applications, and company directories.
-## Deployment:
-- Host the app on Github.
+- The user will be able to view, edit, and create new applications, which will be added to the active pandas dataframe, then uploaded to Google Drive when the UI is closed
+  - The user will be notified if this is not successful. No data will be lost from the existing file
 
-# Website Layout
-## Welcome Page
-- Welcome Message
+# Dependencies:
+
+
+# UI Layout
+### View Applications
+- Table list of all applications
+   - Select to view Job Title | Company | Last Update | Status | Connections
+
+### Add New Application
+ - Accepts user input for all fields
+    - Adding a connection is optional
+
+### Update Applications
+- Status update menu
+- Change connection
+- Delete application 
+
+### Data Analytics
 - Job application analytics - Graphical representation of the application status
-
-## Applications Page
-- Table list of all applications - Job Title | Company | Applied Date | Status | Connections | Notes/Reminders
-- Status update button 
-  - Add New job
-  - Change of Status
-  - New connection
-- Set a reminder
-  - to prep for interview
-  - send an email
-  - follow up
-    
-## Company Directory Page - (Optional for now)
-- Table View of the Companies shortlisted - Company | Industry | Locations | Connections | Notes/Reminders
-- Status update button
-  - New connections made
-- Set a reminder - to events / check  for new job openings / follow up with the network 
-
+  - Applications by status
+  - Applications by source
+  - Applications by company
+  - Applications timeline
+  - Application status + source
 
