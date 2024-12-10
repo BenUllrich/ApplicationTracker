@@ -8,7 +8,8 @@ class Application:
         self.__platform = method                # Where the application was submitted
         self.__conn = connections               # Any connections established at the company
         if not lastUpdate:
-            self.__date = date.today()       # The last time this particular application was updated
+            self.__date = date.today()          # The last time this particular application was updated
+        else: self.__date = lastUpdate
 
     """
     def openResume(self):
