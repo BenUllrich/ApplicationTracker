@@ -1,4 +1,7 @@
-import os
+# Author: Benjamin Ullrich, Dhavan Antala, Om Gaikwad
+# Date: December 10, 2024
+# Description: Main file used to run Application tracker. Output includes url for sign-in in case of tab closure.
+
 import tkinter.messagebox
 from tkinter import *
 from tkinter import ttk
