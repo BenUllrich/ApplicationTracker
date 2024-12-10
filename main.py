@@ -1,3 +1,4 @@
+import os
 import tkinter.messagebox
 from tkinter import *
 from tkinter import ttk
@@ -39,7 +40,7 @@ def refresh(arg=None):
         # create and submit the new app using UI input
         appSubmission.submit_application(
             Application.Application(company_var.get(), title_var.get(), platform_var.get(), status_var.get(),
-                                    conn_var.get())
+                                    conn_var.get()),"processed_applications.csv"
         )
 
         # re-read the csv after submitting applications, then update the listboxes with the new csv info
@@ -94,7 +95,7 @@ def refresh(arg=None):
             lbUpdate.delete(0, END)
 
             # Submit the updated application, update listboxes
-            appSubmission.submit_application(new)
+            appSubmission.submit_application(new,"processed_applications.csv")
             apps = pd.read_csv("processed_applications.csv")
             for i, row in apps.iterrows():
                 lb.insert(i, f"{row['Company']:}  ({row['Date']:>})")
@@ -125,8 +126,9 @@ def viewApp(event):
            else:
                contactView.config(text="Contact: " + str(apps.loc[lb.curselection()[0], 'Contact Person']))
 
-
-# TODO: CREATE + ADD CODE TO CONNECT GOOGLE DRIVE BEFORE UI OPENS
+# when app begins, ask user to sign in to drive, then look for the correct file to load information
+service = appSubmission.authenticate_user()
+appSubmission.download_from_drive(service,"processed_applications.csv")
 
 # check for csv, then create an object for data analysis
 appSubmission.checkCSV("processed_applications.csv")
@@ -281,4 +283,7 @@ Button(analysis, text="Application\nStatus + Source",height=3, width=20,
 window.mainloop()
 
 # when UI is closed, attempt to upload csv to drive
-appSubmission.upload_to_drive("processed_applications.csv")
+appSubmission.upload_to_drive(service,"processed_applications.csv")
+os.remove("processed_applications.csv")
+print("Local CSV file removed, ending program")
+
