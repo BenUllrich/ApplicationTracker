@@ -1,3 +1,7 @@
+# Author: Benjamin Ullrich, Dhavan Antala, Om Gaikwad
+# Date: December 10, 2024
+# Description: A class that uses matplotlib to display application information
+
 import pandas as pd
 import matplotlib.pyplot as plt
 import os
