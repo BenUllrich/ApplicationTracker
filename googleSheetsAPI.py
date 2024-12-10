@@ -1,14 +1,15 @@
+"""
 import gspread
 from oauth2client.service_account import ServiceAccountCredentials
 
 def connect_to_google_sheet(sheet_name):
-    """
+    
     Connect to a Google Sheet using service account credentials.
     Args:
         sheet_name (str): The name of the Google Sheet.
     Returns:
         gspread.models.Worksheet: The worksheet instance.
-    """
+    
     try:
         # Define the scope
         scope = ["https://spreadsheets.google.com/feeds", "https://www.googleapis.com/auth/drive"]
@@ -44,12 +45,12 @@ def test_google_sheets_access():
         print(f"Error: {e}")
 
 def add_application_to_sheet(sheet, app):
-    """
+    
     Append application details to the Google Sheet.
     Args:
         sheet: gspread Sheet instance
         app: Instance of the Application class
-    """
+    
     try:
         # Extract data from the Application object
         data = [
@@ -72,3 +73,5 @@ def add_application_to_sheet(sheet, app):
 
 if __name__ == "__main__":
     test_google_sheets_access()
+
+"""
