@@ -9,6 +9,11 @@
 - google-api-python-client
 - matplotlib
 
+## To Run:
+> git clone https://github.com/BenUllrich/ApplicationTracker
+#### In Directory ApplicationTracker:
+> Python main.py
+
 ## Functionality Description:
 - On launch, user will be prompted to sign in to Google Drive
 - Using the Google Drive API, the app will download the existing spreadsheet from the user's drive
